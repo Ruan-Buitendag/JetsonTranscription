@@ -247,14 +247,14 @@ onset_detected: ;
 
 //    SaveSpectrogramToCSV("1.csv", &a);
 
-    SaveSpectrogramToCSV("notespec.csv", &note_spec);
+//    SaveSpectrogramToCSV("notespec.csv", &note_spec);
 
 
     Matrix weights_activation = ComputeActivations(&note_spec, 5, &single_note_dictionary, "constant");
 
     // get means along axis 1
 
-    SaveMatrixToCSV("wieghtdsactivation.csv", &weights_activation);
+//    SaveMatrixToCSV("wieghtdsactivation.csv", &weights_activation);
 
     printf("Activations done\n");
 

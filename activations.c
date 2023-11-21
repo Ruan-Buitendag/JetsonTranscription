@@ -72,11 +72,27 @@ double Gaussian(double x, double y){
     return exp(exponent);
 }
 
+double roundToDecimalPlaces(double number, int decimalPlaces){
+    double multiplier = pow(10.0, decimalPlaces);
+    return round(number * multiplier)/multiplier;
+}
+
 Matrix ComputeActivations(const Spectrogram *X, int iterations,
                           const Dictionary *dictionary, const char * init) {
 
-//    printf("Super big balls\n");
-//    fflush(stdout);
+//    for(int i = 0; i < dictionary->shape[0]; i++){
+//        for(int j = 0; j < dictionary->shape[1]; j++){
+//            for(int k = 0; k < dictionary->shape[2]; k++){
+//                dictionary->data[i][j][k] = roundToDecimalPlaces(dictionary->data[i][j][k], 6);
+//            }
+//        }
+//    }
+
+//    for(int i = 0; i < X->matrix.rows; i++){
+//        for(int j = 0; j < X->matrix.cols; j++){
+//            X->matrix.array[i * X->matrix.cols + j] = roundToDecimalPlaces(X->matrix.array[i * X->matrix.cols + j], 2);
+//        }
+//    }
 
     clock_t begin = clock();
 
@@ -88,8 +104,6 @@ Matrix ComputeActivations(const Spectrogram *X, int iterations,
 
     Matrix activations = CreateMatrix(r, ncol);
 
-//    printf("Super big balls\n");
-//    fflush(stdout);
 
     if(strcmp(init, "gauss") == 0){
         for (int ii = 0; ii < activations.rows; ii++) {
@@ -114,15 +128,15 @@ Matrix ComputeActivations(const Spectrogram *X, int iterations,
 //    printf("Right before conv\n");
 //    fflush(stdout);
 
-    Matrix conved = ComputeConvolution(dictionary, &activations, T);
+//    Matrix conved = ComputeConvolution(dictionary, &activations, T);
 
-    printf("After conv\n");
-    fflush(stdout);
+//    printf("After conv\n");
+//    fflush(stdout);
 
 //    double error_int = BetaDivergence(&X->matrix, &conved, 1);
 
 //    printf("ComputeActivations: Initial error = %f\n", error_int);
-    fflush(stdout);
+//    fflush(stdout);
 
     Matrix convolutions[T];
 
@@ -276,7 +290,7 @@ Matrix ComputeActivations(const Spectrogram *X, int iterations,
 //        SaveMatrixToCSV("activations.csv", &activations);
 
         DestroyMatrix(&num);
-        DestroyMatrix(&conved);
+//        DestroyMatrix(&conved);
 
 //        conved = ComputeConvolution(dictionary, &activations, T);
 
@@ -303,6 +317,10 @@ Matrix ComputeActivations(const Spectrogram *X, int iterations,
 //        obj_prev = obj;
         iteration++;
 
+//        if(iteration > 0){
+//            exit(1);
+//        }
+
         clock_t end = clock();
 //        printf("Time: %lf\n", (double)(end-begin)/CLOCKS_PER_SEC);
 //        fflush(stdout);
@@ -315,11 +333,47 @@ Matrix ComputeActivations(const Spectrogram *X, int iterations,
     return activations;
 }
 
-Matrix ComputeConvolution(const Dictionary *dictionary, const Matrix *matrix2, int t) {
-    Matrix convolutions[t/2];
+//Matrix ComputeConvolution(const Dictionary *dictionary, const Matrix *matrix2, int t) {
+//    Matrix convolutions[t/2];
 
-    for (int i = 0; i < t/2; i++) {
-        Matrix tspec = GetMatrixFromDictionary(dictionary, 0, i*2);
+//    for (int i = 0; i < t/2; i++) {
+//        Matrix tspec = GetMatrixFromDictionary(dictionary, 0, i*2);
+
+////        printf("Got spec from dict\n");
+////        fflush(stdout);
+
+//        Matrix shifted = ShiftMatrix(matrix2, i);
+
+////        printf("Shifted\n");
+////        fflush(stdout);
+
+//        convolutions[i] = MatrixMultiply(&tspec, &shifted);
+
+
+////        printf("Multipled\n");
+////        fflush(stdout);
+
+//        DestroyMatrix(&tspec);
+//        DestroyMatrix(&shifted);
+//    }
+
+//    Matrix conv_sum = SumMatricesAlongAxis(convolutions, t/2, 0);
+
+////    printf("Summed\n");
+////    fflush(stdout);
+
+//    for (int i = 0; i < t/2; i++) {
+//        DestroyMatrix(&convolutions[i]);
+//    }
+
+//    return conv_sum;
+//}
+
+Matrix ComputeConvolution(const Dictionary *dictionary, const Matrix *matrix2, int t) {
+    Matrix convolutions[t];
+
+    for (int i = 0; i < t; i++) {
+        Matrix tspec = GetMatrixFromDictionary(dictionary, 0, i);
 
 //        printf("Got spec from dict\n");
 //        fflush(stdout);
@@ -339,19 +393,16 @@ Matrix ComputeConvolution(const Dictionary *dictionary, const Matrix *matrix2, i
         DestroyMatrix(&shifted);
     }
 
-    Matrix conv_sum = SumMatricesAlongAxis(convolutions, t/2, 0);
+    Matrix conv_sum = SumMatricesAlongAxis(convolutions, t, 0);
 
 //    printf("Summed\n");
 //    fflush(stdout);
 
-    for (int i = 0; i < t/2; i++) {
+    for (int i = 0; i < t; i++) {
         DestroyMatrix(&convolutions[i]);
     }
 
     return conv_sum;
-
-
-
 }
 
 
