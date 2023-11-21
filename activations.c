@@ -278,7 +278,7 @@ Matrix ComputeActivations(const Spectrogram *X, int iterations,
         DestroyMatrix(&num);
         DestroyMatrix(&conved);
 
-        conved = ComputeConvolution(dictionary, &activations, T);
+//        conved = ComputeConvolution(dictionary, &activations, T);
 
 //        SaveMatrixToCSV("final.csv", &conved);
 

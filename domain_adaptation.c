@@ -211,8 +211,8 @@ onset_detected: ;
     int midi_note = GetSingleNoteFromSpec(&note_spec);
 
 
-    char *piano_W[8] = {"AkPnBcht", "AkPnBsdf", "AkPnCGdD", "AkPnStgb", "ENSTDkCl", "ENSTDkAm", "SptkBGAm", "StbgTGd2"};
-
+//    char *piano_W[8] = {"AkPnBcht", "AkPnBsdf", "AkPnCGdD", "AkPnStgb", "ENSTDkCl", "ENSTDkAm", "SptkBGAm", "StbgTGd2"};
+    char *piano_W[8] = {"AkPnBcht", "AkPnBsdf", "AkPnCGdD", "AkPnStgb", "ENSTDkCl"};
 
     char single_template_dir[256] = "/media/ruan/KINGSTON/data_persisted/single_notes/csv/";
 
@@ -243,10 +243,18 @@ onset_detected: ;
     printf("Super big balls\n");
     fflush(stdout);
 
+//    Spectrogram a = GetSpectrogramFromDictionary(&single_note_dictionary, 2, 4);
 
-    Matrix weights_activation = ComputeActivations(&note_spec, 15, &single_note_dictionary, "constant");
+//    SaveSpectrogramToCSV("1.csv", &a);
+
+    SaveSpectrogramToCSV("notespec.csv", &note_spec);
+
+
+    Matrix weights_activation = ComputeActivations(&note_spec, 5, &single_note_dictionary, "constant");
 
     // get means along axis 1
+
+    SaveMatrixToCSV("wieghtdsactivation.csv", &weights_activation);
 
     printf("Activations done\n");
 
@@ -377,6 +385,13 @@ Dictionary GetBestDictionaryForArray(DynamicArray *array, Dictionary* dictionari
     fflush(stdout);
 
     DynamicArray weights = CalculateTemplateWeights(&spec, iterations);
+
+//    DynamicArray weights;
+//    weights.size = 5;
+
+//    double asss[5] = {0.2479, 0.3789, 0.1024, 0.1368, 0.13397};
+
+//    weights.array = asss;
 
     printf("Template weight calc done, adjusting dictionary\n");
 
