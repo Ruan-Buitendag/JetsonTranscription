@@ -6,46 +6,91 @@
 
 
 void LoadDictionary(Dictionary *dictionary, char *filename) {
-    printf("in LoadDictionary\n");
-    fflush(stdout);
+//    printf("in LoadDictionary\n");
+//    fflush(stdout);
 
-    int dims[3];
+//    int dims[3];
 
-    FILE *file = fopen(filename, "r");
+//    FILE *file = fopen(filename, "r");
 
+//    if (file == NULL) {
+//        perror("Error opening file");
+
+//        printf(filename);
+//        fflush(stdout);
+
+//        exit(1);
+//    }
+
+
+//    double value;
+//    int shape;
+
+
+//    for(int i = 0; i < 3; i++){
+//        fscanf(file, "%d", &shape);
+//        int ss = shape;
+//        dictionary->shape[i] = ss;
+//            printf("dict shape: %d\n", ss);
+//    }
+
+//    AllocateDictionaryMemory(dictionary);
+
+//    for(int i = 0; i < dictionary->shape[0]; i++){
+//        for(int j = 0; j < dictionary->shape[1]; j++){
+//            for(int k = 0; k < dictionary->shape[2]; k++){
+//                fscanf(file, "%lf", &value);
+//                dictionary->data[i][j][k] = value;
+//            }
+//        }
+//    }
+
+//    fclose(file);
+
+
+    // Open the binary file for reading
+    FILE *file = fopen(filename, "rb");
     if (file == NULL) {
         perror("Error opening file");
-
-        printf(filename);
-        fflush(stdout);
-
         exit(1);
     }
 
+    int shape[3];
 
-    double value;
-    int shape;
+    fread(shape, sizeof(int), 3, file);
 
+//    int num_floats = shape[0] * shape[1] * shape[2];
 
-    for(int i = 0; i < 3; i++){
-        fscanf(file, "%d", &shape);
-        int ss = shape;
-        dictionary->shape[i] = ss;
-            printf("dict shape: %d\n", ss);
-    }
+//    Dictionary aaaaaaaa;
+
+    dictionary->shape[0] = shape[0];
+    dictionary->shape[1] = shape[1];
+    dictionary->shape[2] = shape[2];
 
     AllocateDictionaryMemory(dictionary);
 
-    for(int i = 0; i < dictionary->shape[0]; i++){
-        for(int j = 0; j < dictionary->shape[1]; j++){
-            for(int k = 0; k < dictionary->shape[2]; k++){
-                fscanf(file, "%lf", &value);
-                dictionary->data[i][j][k] = value;
-            }
+    printf("Allocated sictionary of size %d %d %d \n", shape[0], shape[1], shape[2]);
+    fflush(stdout);
+
+    for(int a = 0; a < shape[0]; a++){
+        for(int b = 0; b < shape[1]; b++){
+            fread(dictionary->data[a][b], sizeof(double), shape[2], file);
+
+//            for(int c = 0; c < shape[2]; c++){
+//                fread(&aaaaaaaa.data[a][b][c], sizeof(double), 1, file);
+//            }
         }
     }
-
     fclose(file);
+
+
+//    Spectrogram aggggggggg = GetSpectrogramFromDictionary(&aaaaaaaa, 2, 0);
+//    SaveMatrixToCSV("ssssssssssssssssssssssssddddddddddd.csv", &aggggggggg.matrix);
+//    DestroySpectrogram(&aggggggggg);
+
+
+    printf("loaded dictionary\n");
+    fflush(stdout);
 }
 
 
@@ -212,10 +257,13 @@ Dictionary GetDictionary(const char *piano_name) {
     // Iterate through piano_W
     char W_persisted_name[256]; // Adjust the size as needed
 
+//    const char *file_path = "C:/Users/ruanb/OneDrive/Desktop/Piano Transcripton/Piano Transcription (C)/data_persisted/dictionaries/bin/conv_dict_piano_AkPnBcht.bin";
+
+
 
     snprintf(W_persisted_name, sizeof(W_persisted_name),
-             "%sconv_dict_piano_%s.csv",
-             "/media/ruan/KINGSTON/data_persisted/dictionaries/",
+             "%sconv_dict_piano_%s.bin",
+             "/media/ruan/KINGSTON/data_persisted/dictionaries/bin/",
              piano_name);
 
     LoadDictionary(&dictionary, W_persisted_name);

@@ -210,9 +210,9 @@ Matrix ComputeActivations(const Spectrogram *X, int iterations,
         for (int i = 0; i < A.rows; i++) {
             for (int j = 0; j < A.cols; j++) {
 
-                if (A.array[i *A.cols +  j] < 1e-8) {
-                    A.array[i *A.cols +  j] = 1e-8;
-                }
+//                if (A.array[i *A.cols +  j] < 1e-8) {
+//                    A.array[i *A.cols +  j] = 1e-8;
+//                }
 
                 A.array[i *A.cols +  j] = X->matrix.array[i *X->matrix.cols +   j] * 1 / A.array[i * A.cols + j];
 
@@ -271,9 +271,9 @@ Matrix ComputeActivations(const Spectrogram *X, int iterations,
 
         for (int row = 0; row < activations.rows; row++) {
             for (int c = 0; c < ncol - T; c++) {
-                if (denom_all_col.array[row *denom_all_col.cols +   c] < 1e-8) {
-                    denom_all_col.array[row *denom_all_col.cols +  c] = 1e-8;
-                }
+//                if (denom_all_col.array[row *denom_all_col.cols +   c] < 1e-8) {
+//                    denom_all_col.array[row *denom_all_col.cols +  c] = 1e-8;
+//                }
                 activations.array[row *activations.cols +  c] *= (num.array[row *num.cols +  c] / denom_all_col.array[row *denom_all_col.cols +  c]);
             }
         }

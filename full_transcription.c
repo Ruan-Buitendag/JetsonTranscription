@@ -130,6 +130,38 @@ Matrix transcribe_array(DynamicArray *array, const char * transcriptionFile, int
 
     printf("delay: %f\n", delay);
 
+
+    printf("Denoising\n");
+
+    SaveSpectrogramToCSV("filtered.csv", &filtered);
+
+//    DynamicArray denoiser = CreateDynamicArray(filtered.matrix.rows);
+
+    for(int bin = 0 ; bin < filtered.matrix.rows; bin++){
+//        denoiser
+        double mean = 0;
+
+        for(int c = 0; c < round(delay/0.02); c++){
+            mean += filtered.matrix.array[bin * filtered.matrix.cols + c];
+        }
+
+        mean =  mean / round(delay/0.02);
+
+//        printf()
+
+        for(int c = 0; c < filtered.matrix.cols; c++){
+            filtered.matrix.array[bin * filtered.matrix.cols + c] -= mean;
+
+            if(filtered.matrix.array[bin * filtered.matrix.cols + c] < 0){
+                filtered.matrix.array[bin * filtered.matrix.cols + c] = 0.00000001;
+            }
+        }
+    }
+
+    SaveSpectrogramToCSV("denoised.csv", &filtered);
+
+
+
     printf("Transcribing\n");
     fflush(stdout);
 
